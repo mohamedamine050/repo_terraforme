@@ -42,6 +42,22 @@ output "glue_job_arn" {
   value = aws_glue_job.etl.arn
 }
 
+output "glue_second_job_name" {
+  value = aws_glue_job.etl_second.id
+}
+
+output "glue_second_job_arn" {
+  value = aws_glue_job.etl_second.arn
+}
+
+output "glue_second_script_s3_key" {
+  value = aws_s3_object.glue_second_script.key
+}
+
+output "glue_second_script_s3_bucket" {
+  value = aws_s3_object.glue_second_script.bucket
+}
+
 output "glue_job_role_name" {
   value = aws_iam_role.glue_job.name
 }
