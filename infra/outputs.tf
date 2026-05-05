@@ -58,6 +58,38 @@ output "glue_second_script_s3_bucket" {
   value = aws_s3_object.glue_second_script.bucket
 }
 
+output "glue_third_job_name" {
+  value = aws_glue_job.etl_third.id
+}
+
+output "glue_third_job_arn" {
+  value = aws_glue_job.etl_third.arn
+}
+
+output "glue_third_script_s3_key" {
+  value = aws_s3_object.glue_third_script.key
+}
+
+output "glue_third_script_s3_bucket" {
+  value = aws_s3_object.glue_third_script.bucket
+}
+
+output "glue_fourth_job_name" {
+  value = aws_glue_job.etl_fourth.id
+}
+
+output "glue_fourth_job_arn" {
+  value = aws_glue_job.etl_fourth.arn
+}
+
+output "glue_fourth_script_s3_key" {
+  value = aws_s3_object.glue_fourth_script.key
+}
+
+output "glue_fourth_script_s3_bucket" {
+  value = aws_s3_object.glue_fourth_script.bucket
+}
+
 output "glue_job_role_name" {
   value = aws_iam_role.glue_job.name
 }

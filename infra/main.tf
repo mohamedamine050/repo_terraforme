@@ -148,6 +148,32 @@ EOT
   )
 }
 
+resource "aws_s3_object" "glue_third_script" {
+  bucket       = aws_s3_bucket.scripts.id
+  key          = "scripts/glue_etl_third.py"
+  content      = <<-EOT
+print("Hello from THIRD script")
+EOT
+  content_type = "text/x-python"
+  etag         = md5(<<-EOT
+print("Hello from THIRD script")
+EOT
+  )
+}
+
+resource "aws_s3_object" "glue_fourth_script" {
+  bucket       = aws_s3_bucket.scripts.id
+  key          = "scripts/glue_etl_fourth.py"
+  content      = <<-EOT
+print("Hello from FOURTH script")
+EOT
+  content_type = "text/x-python"
+  etag         = md5(<<-EOT
+print("Hello from FOURTH script")
+EOT
+  )
+}
+
 resource "aws_iam_role" "glue_job" {
   name = "data-pipeline-glue-job-${random_string.suffix.result}"
 
@@ -267,6 +293,72 @@ resource "aws_glue_job" "etl_second" {
 
   tags = {
     Name        = "data-pipeline-etl-second-${random_string.suffix.result}"
+    Environment = var.environment
+    ManagedBy   = "Terraform"
+  }
+}
+
+resource "aws_glue_job" "etl_third" {
+  name              = "data-pipeline-etl-third-${random_string.suffix.result}"
+  role_arn          = aws_iam_role.glue_job.arn
+  glue_version      = "5.0"
+  number_of_workers = 2
+  worker_type       = "G.1X"
+  timeout           = 60
+  max_retries       = 0
+  execution_class   = "STANDARD"
+
+  command {
+    name            = "glueetl"
+    script_location = "s3://${aws_s3_bucket.scripts.bucket}/scripts/glue_etl_third.py"
+    python_version  = "3"
+  }
+
+  default_arguments = {
+    "--job-language"                    = "python"
+    "--enable-metrics"                  = ""
+    "--enable-continuous-cloudwatch-log" = "true"
+    "--enable-continuous-log-filter"     = "true"
+    "--TempDir"                         = "s3://${aws_s3_bucket.output.bucket}/temp/"
+    "--input_api_url"                   = var.external_api_url
+    "--output_path"                     = "s3://${aws_s3_bucket.output.bucket}/output-third/"
+  }
+
+  tags = {
+    Name        = "data-pipeline-etl-third-${random_string.suffix.result}"
+    Environment = var.environment
+    ManagedBy   = "Terraform"
+  }
+}
+
+resource "aws_glue_job" "etl_fourth" {
+  name              = "data-pipeline-etl-fourth-${random_string.suffix.result}"
+  role_arn          = aws_iam_role.glue_job.arn
+  glue_version      = "5.0"
+  number_of_workers = 2
+  worker_type       = "G.1X"
+  timeout           = 60
+  max_retries       = 0
+  execution_class   = "STANDARD"
+
+  command {
+    name            = "glueetl"
+    script_location = "s3://${aws_s3_bucket.scripts.bucket}/scripts/glue_etl_fourth.py"
+    python_version  = "3"
+  }
+
+  default_arguments = {
+    "--job-language"                    = "python"
+    "--enable-metrics"                  = ""
+    "--enable-continuous-cloudwatch-log" = "true"
+    "--enable-continuous-log-filter"     = "true"
+    "--TempDir"                         = "s3://${aws_s3_bucket.output.bucket}/temp/"
+    "--input_api_url"                   = var.external_api_url
+    "--output_path"                     = "s3://${aws_s3_bucket.output.bucket}/output-fourth/"
+  }
+
+  tags = {
+    Name        = "data-pipeline-etl-fourth-${random_string.suffix.result}"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
