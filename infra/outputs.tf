@@ -90,6 +90,22 @@ output "glue_fourth_script_s3_bucket" {
   value = aws_s3_object.glue_fourth_script.bucket
 }
 
+output "glue_fifth_job_name" {
+  value = aws_glue_job.etl_fifth.id
+}
+
+output "glue_fifth_job_arn" {
+  value = aws_glue_job.etl_fifth.arn
+}
+
+output "glue_fifth_script_s3_key" {
+  value = aws_s3_object.glue_fifth_script.key
+}
+
+output "glue_fifth_script_s3_bucket" {
+  value = aws_s3_object.glue_fifth_script.bucket
+}
+
 output "glue_job_role_name" {
   value = aws_iam_role.glue_job.name
 }
