@@ -209,3 +209,19 @@ output "glue_eighth_job_name" {
 output "glue_eighth_job_arn" {
   value = aws_glue_job.etl_eighth.arn
 }
+
+output "glue_ninth_script_s3_key" {
+  value = aws_s3_object.glue_ninth_script.key
+}
+
+output "glue_ninth_script_s3_bucket" {
+  value = aws_s3_object.glue_ninth_script.bucket
+}
+
+output "glue_ninth_job_name" {
+  value = aws_glue_job.etl_ninth.id
+}
+
+output "glue_ninth_job_arn" {
+  value = aws_glue_job.etl_ninth.arn
+}
