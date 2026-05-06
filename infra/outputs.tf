@@ -177,3 +177,19 @@ output "glue_sixth_job_name" {
 output "glue_sixth_job_arn" {
   value = aws_glue_job.etl_sixth.arn
 }
+
+output "glue_seventh_script_s3_key" {
+  value = aws_s3_object.glue_seventh_script.key
+}
+
+output "glue_seventh_script_s3_bucket" {
+  value = aws_s3_object.glue_seventh_script.bucket
+}
+
+output "glue_seventh_job_name" {
+  value = aws_glue_job.etl_seventh.id
+}
+
+output "glue_seventh_job_arn" {
+  value = aws_glue_job.etl_seventh.arn
+}
