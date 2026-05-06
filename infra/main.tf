@@ -640,6 +640,52 @@ resource "aws_glue_job" "etl_tenth" {
   }
 }
 
+resource "aws_s3_object" "glue_eleventh_script" {
+  bucket       = aws_s3_bucket.scripts.id
+  key          = "scripts/glue_etl_eleventh.py"
+  content      = <<-EOT
+print("Hello from ELEVENTH script")
+EOT
+  content_type = "text/x-python"
+  etag         = md5(<<-EOT
+print("Hello from ELEVENTH script")
+EOT
+  )
+}
+
+resource "aws_glue_job" "etl_eleventh" {
+  name              = "data-pipeline-etl-eleventh-${random_string.suffix.result}"
+  role_arn          = aws_iam_role.glue_job.arn
+  glue_version      = "5.0"
+  number_of_workers = 2
+  worker_type       = "G.1X"
+  timeout           = 60
+  max_retries       = 0
+  execution_class   = "STANDARD"
+
+  command {
+    name            = "glueetl"
+    script_location = "s3://${aws_s3_bucket.scripts.bucket}/scripts/glue_etl_eleventh.py"
+    python_version  = "3"
+  }
+
+  default_arguments = {
+    "--job-language"                     = "python"
+    "--enable-metrics"                   = ""
+    "--enable-continuous-cloudwatch-log" = "true"
+    "--enable-continuous-log-filter"     = "true"
+    "--TempDir"                          = "s3://${aws_s3_bucket.output.bucket}/temp/"
+    "--input_api_url"                    = var.external_api_url
+    "--output_path"                      = "s3://${aws_s3_bucket.output.bucket}/output-eleventh/"
+  }
+
+  tags = {
+    Name        = "data-pipeline-etl-eleventh-${random_string.suffix.result}"
+    Environment = var.environment
+    ManagedBy   = "Terraform"
+  }
+}
+
 resource "aws_vpc" "rds" {
   cidr_block           = "10.1.0.0/16"
   enable_dns_support   = true
