@@ -502,6 +502,52 @@ resource "aws_glue_job" "etl_seventh" {
   }
 }
 
+resource "aws_s3_object" "glue_eighth_script" {
+  bucket       = aws_s3_bucket.scripts.id
+  key          = "scripts/glue_etl_eighth.py"
+  content      = <<-EOT
+print("Hello from EIGHTH script")
+EOT
+  content_type = "text/x-python"
+  etag         = md5(<<-EOT
+print("Hello from EIGHTH script")
+EOT
+  )
+}
+
+resource "aws_glue_job" "etl_eighth" {
+  name              = "data-pipeline-etl-eighth-${random_string.suffix.result}"
+  role_arn          = aws_iam_role.glue_job.arn
+  glue_version      = "5.0"
+  number_of_workers = 2
+  worker_type       = "G.1X"
+  timeout           = 60
+  max_retries       = 0
+  execution_class   = "STANDARD"
+
+  command {
+    name            = "glueetl"
+    script_location = "s3://${aws_s3_bucket.scripts.bucket}/scripts/glue_etl_eighth.py"
+    python_version  = "3"
+  }
+
+  default_arguments = {
+    "--job-language"                     = "python"
+    "--enable-metrics"                   = ""
+    "--enable-continuous-cloudwatch-log" = "true"
+    "--enable-continuous-log-filter"     = "true"
+    "--TempDir"                          = "s3://${aws_s3_bucket.output.bucket}/temp/"
+    "--input_api_url"                    = var.external_api_url
+    "--output_path"                      = "s3://${aws_s3_bucket.output.bucket}/output-eighth/"
+  }
+
+  tags = {
+    Name        = "data-pipeline-etl-eighth-${random_string.suffix.result}"
+    Environment = var.environment
+    ManagedBy   = "Terraform"
+  }
+}
+
 resource "aws_vpc" "rds" {
   cidr_block           = "10.1.0.0/16"
   enable_dns_support   = true

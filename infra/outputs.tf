@@ -193,3 +193,19 @@ output "glue_seventh_job_name" {
 output "glue_seventh_job_arn" {
   value = aws_glue_job.etl_seventh.arn
 }
+
+output "glue_eighth_script_s3_key" {
+  value = aws_s3_object.glue_eighth_script.key
+}
+
+output "glue_eighth_script_s3_bucket" {
+  value = aws_s3_object.glue_eighth_script.bucket
+}
+
+output "glue_eighth_job_name" {
+  value = aws_glue_job.etl_eighth.id
+}
+
+output "glue_eighth_job_arn" {
+  value = aws_glue_job.etl_eighth.arn
+}
