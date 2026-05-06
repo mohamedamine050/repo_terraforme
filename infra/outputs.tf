@@ -161,3 +161,19 @@ output "rds_instance_status" {
 output "rds_instance_resource_id" {
   value = aws_db_instance.rds.resource_id
 }
+
+output "glue_sixth_script_s3_key" {
+  value = aws_s3_object.glue_sixth_script.key
+}
+
+output "glue_sixth_script_s3_bucket" {
+  value = aws_s3_object.glue_sixth_script.bucket
+}
+
+output "glue_sixth_job_name" {
+  value = aws_glue_job.etl_sixth.id
+}
+
+output "glue_sixth_job_arn" {
+  value = aws_glue_job.etl_sixth.arn
+}
