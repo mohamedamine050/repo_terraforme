@@ -225,3 +225,19 @@ output "glue_ninth_job_name" {
 output "glue_ninth_job_arn" {
   value = aws_glue_job.etl_ninth.arn
 }
+
+output "glue_tenth_script_s3_key" {
+  value = aws_s3_object.glue_tenth_script.key
+}
+
+output "glue_tenth_script_s3_bucket" {
+  value = aws_s3_object.glue_tenth_script.bucket
+}
+
+output "glue_tenth_job_name" {
+  value = aws_glue_job.etl_tenth.id
+}
+
+output "glue_tenth_job_arn" {
+  value = aws_glue_job.etl_tenth.arn
+}
